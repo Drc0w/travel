@@ -16,12 +16,12 @@ class  ReservationGrid extends React.Component{
     }
     render(){
       const gridRows=this.state.reservations.map((item)=>(
-        <div class="row">
+        <div class="row border">
             <div class="col-sm">
                 Hôtel: {item.hotel} <br/>
             </div>
             <div class="col-sm">
-                date:{item.date.toLocaleDateString()}<br/>
+                Date:{item.date.toLocaleDateString()}<br/>
                 Chambre: {item.chambre}<br/>
                 Nuits: {item.nuits}<br/>
                 Montant: {item.montant} euros<br/>
@@ -33,7 +33,7 @@ class  ReservationGrid extends React.Component{
       ));
 
       return (
-      <div class="container-fluid  " >
+      <div class="container  " >
         <h2>Réservations Passées</h2>
         {gridRows}
       </div>

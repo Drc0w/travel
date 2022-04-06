@@ -20,6 +20,7 @@ function App() {
           Learn React
         </a>
       </header>
+      <ReservationForm/>
       <ReservationGrid/>
     </div>
   );
