@@ -3,15 +3,19 @@ import React from 'react';
 
 class  ReservationGrid extends React.Component{
     constructor(props){
-    super(props);
-    this.state={
-        reservations:[
-            {hotel:"Acme",date:new Date(), chambre:"Simple", nuits:1, montant:100},
-            {hotel:"Meca",date:new Date(), chambre:"Double", nuits:2, montant:200},
-            {hotel:"Contoso",date:new Date(), chambre:"Triple", nuits:3, montant:300},
-            {hotel:"Starlink",date:new Date(), chambre:"Quadruple", nuits:4, montant:400}
-        ]
-    };
+        super(props);
+        this.state={
+           reservations:[]
+        };
+    }
+    componentDidMount(){
+      fetch("http://localhost/api/reservations")
+      .then(response=>response.json())
+      .then(data=>{
+        this.setState({reservations:data});
+      });
+    }
+    componentWillUnmount() {
 
     }
     render(){
@@ -27,7 +31,7 @@ class  ReservationGrid extends React.Component{
                 Montant: {item.montant} euros<br/>
             </div>
             <div class="col-sm">
-                <button>Réserver à nouveau</button>
+                <button class="btn btn-primary">Réserver à nouveau</button>
             </div>
         </div>
       ));
