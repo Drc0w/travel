@@ -1,7 +1,9 @@
 package org.acme.travel.api.rest.reservation;
 
 import org.acme.travel.application.reservation.ReservationFacade;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,5 +25,12 @@ public class ReservationController {
                 .map(entity->ReservationDTO.map(entity))
                 .collect(Collectors.toList())
         );
+    }
+
+    @RequestMapping(method = RequestMethod.POST, path = "api/reservations", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> save(@RequestBody  ReservationFormDTO dto){
+        this.facade.save(ReservationFormDTO.toEntity(dto));
+        return ResponseEntity.ok("Réservation approuvée");
+        
     }
 }

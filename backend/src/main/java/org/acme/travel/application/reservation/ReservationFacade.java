@@ -18,4 +18,7 @@ public class ReservationFacade {
     public List<ReservationEntity> findAll(){
         return this.repository.findAll();
     }
+    public void save(ReservationEntity entity){
+        this.repository.save(entity);
+    }
 }
