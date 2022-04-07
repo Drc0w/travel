@@ -9,7 +9,7 @@ class  ReservationGrid extends React.Component{
         };
     }
     componentDidMount(){
-      fetch("http://localhost/api/reservations")
+      fetch("http://localhost:8081/api/reservations")
       .then(response=>response.json())
       .then(data=>{
         this.setState({reservations:data});
@@ -25,7 +25,7 @@ class  ReservationGrid extends React.Component{
                 Hôtel: {item.hotel} <br/>
             </div>
             <div class="col-sm">
-                Date:{item.date.toLocaleDateString()}<br/>
+                Date:{item.date}<br/>
                 Chambre: {item.chambre}<br/>
                 Nuits: {item.nuits}<br/>
                 Montant: {item.montant} euros<br/>
