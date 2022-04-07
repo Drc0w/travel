@@ -12,7 +12,7 @@ public class ChambreDTO {
     public static ChambreDTO map(ChambreEntity entity){
         return new ChambreDTO(entity);
     }
-    public int getId(){
+    public Long getId(){
         return this.sub.getId();
     }
     public String getCategorie(){

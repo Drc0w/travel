@@ -12,7 +12,7 @@ public class ReservationFormDTO {
     public ReservationFormDTO() {
     }
     public static ReservationEntity toEntity(ReservationFormDTO dto){
-        return new ReservationEntity(0,dto.getHotel(),dto.getChambre(),dto.getNuits(),dto.getDate(),0);
+        return new ReservationEntity(0L,dto.getHotel(),dto.getChambre(),dto.getNuits(),dto.getDate(),0);
     }
 
     public String getHotel() {

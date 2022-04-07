@@ -1,17 +1,26 @@
 package org.acme.travel.domain.reservation;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "RESERVATIONS")
 public class ReservationEntity {
-    private int id;
+    @Id @GeneratedValue
+    private Long id;
+    @Column(nullable = false)
     private String hotel;
+    @Column(nullable = false)
     private String chambre;
+    @Column(nullable = false)
     private int nuits;
+    @Column(nullable = false)
     private String date;
     private int montant;
 
     public ReservationEntity() {
     }
 
-    public ReservationEntity(int id, String hotel, String chambre, int nuits, String date,int montant) {
+    public ReservationEntity(Long id, String hotel, String chambre, int nuits, String date,int montant) {
         this.id = id;
         this.hotel = hotel;
         this.chambre = chambre;
@@ -20,11 +29,11 @@ public class ReservationEntity {
         this.montant=montant;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

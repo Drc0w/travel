@@ -1,23 +1,32 @@
 package org.acme.travel.domain.hotel;
 
+
+
+import javax.persistence.*;
+
+@Entity
+@Table(name = "HOTELS")
 public class HotelEntity {
 
-    private int id;
+    @Id
+    @GeneratedValue
+    private Long id;
+    @Column(nullable = false)
     private String nom;
 
     public HotelEntity() {
     }
 
-    public HotelEntity(int id, String nom) {
+    public HotelEntity(Long id, String nom) {
         this.id = id;
         this.nom = nom;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

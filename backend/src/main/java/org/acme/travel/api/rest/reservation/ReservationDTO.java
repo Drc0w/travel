@@ -12,7 +12,7 @@ public class ReservationDTO {
     public static ReservationDTO map(ReservationEntity entity){
         return new ReservationDTO(entity);
     }
-    public int getId(){
+    public Long getId(){
         return this.entity.getId();
     }
     public String getHotel(){

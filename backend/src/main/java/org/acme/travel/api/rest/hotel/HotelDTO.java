@@ -11,7 +11,7 @@ public class HotelDTO {
     public static HotelDTO map(HotelEntity entity){
         return new HotelDTO(entity);
     }
-    public int getId(){
+    public Long getId(){
         return this.sub.getId();
     }
     public String getNom(){
