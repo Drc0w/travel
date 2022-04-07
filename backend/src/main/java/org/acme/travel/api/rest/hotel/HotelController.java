@@ -18,7 +18,7 @@ public class HotelController {
         this.facade = facade;
     }
 
-    @RequestMapping(method = RequestMethod.GET ,path = "hotels")
+    @RequestMapping(method = RequestMethod.GET ,path = "api/hotels")
     public ResponseEntity<List<HotelDTO>> findAll(){
         return ResponseEntity.ok(
            this.facade.findAll().stream()
