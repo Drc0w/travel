@@ -9,7 +9,7 @@ class  ReservationGrid extends React.Component{
         };
     }
     componentDidMount(){
-      fetch("http://localhost:8081/api/reservations")
+      fetch(process.env.REACT_APP_API_RESERVATIONS)
       .then(response=>response.json())
       .then(data=>{
         this.setState({reservations:data});
