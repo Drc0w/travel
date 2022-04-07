@@ -8,13 +8,14 @@ public class HotelDTO {
     public HotelDTO(HotelEntity sub) {
         this.sub = sub;
     }
+    public static HotelDTO map(HotelEntity entity){
+        return new HotelDTO(entity);
+    }
     public int getId(){
         return this.sub.getId();
     }
     public String getNom(){
         return this.sub.getNom();
     }
-    public static HotelDTO map(HotelEntity entity){
-        return new HotelDTO(entity);
-    }
+
 }

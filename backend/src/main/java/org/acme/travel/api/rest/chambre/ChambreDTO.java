@@ -9,7 +9,9 @@ public class ChambreDTO {
     public ChambreDTO(ChambreEntity sub) {
         this.sub = sub;
     }
-
+    public static ChambreDTO map(ChambreEntity entity){
+        return new ChambreDTO(entity);
+    }
     public int getId(){
         return this.sub.getId();
     }
@@ -19,7 +21,5 @@ public class ChambreDTO {
     public int getPrix(){
         return this.sub.getPrix();
     }
-    public static ChambreDTO map(ChambreEntity entity){
-        return new ChambreDTO(entity);
-    }
+
 }
