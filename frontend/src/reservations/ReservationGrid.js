@@ -7,7 +7,9 @@ class  ReservationGrid extends React.Component{
         this.state={
            reservations:[]
         };
+
     }
+
     componentDidMount(){
       fetch(process.env.REACT_APP_API_RESERVATIONS)
       .then(response=>response.json())
@@ -20,7 +22,7 @@ class  ReservationGrid extends React.Component{
     }
     render(){
       const gridRows=this.state.reservations.map((item)=>(
-        <div class="row border">
+        <div class="row border" role="row">
             <div class="col-sm">
                 Hôtel: {item.hotel} <br/>
             </div>
@@ -37,7 +39,7 @@ class  ReservationGrid extends React.Component{
       ));
 
       return (
-      <div class="container  " >
+      <div class="container" role="grid">
         <h2>Réservations Passées</h2>
         {gridRows}
       </div>
