@@ -30,7 +30,7 @@ public class ReservationControllerTests {
     private ReservationFacade facade;
 
     @Test
-    void whenGetReservations_thenReturnJsonArray() throws  Exception{
+    void testGetReservations_shouldReturnJsonArray() throws  Exception{
         List<ReservationEntity> reservations= new ArrayList<>();
         reservations.add(new ReservationEntity(1L,"Ritz","Simple",1,"2022-03-03",100));
         reservations.add(new ReservationEntity(2L,"Platza","Double",2,"2022-03-03",200));

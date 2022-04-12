@@ -17,7 +17,7 @@ public class JpaReservationDaoTests {
     private JpaReservationDao sut;
 
     @Test
-    public void whenGetReservation_ThenReturnCorrectRecord(){
+    public void testGetReservation_shouldReturnCorrectRecord(){
         this.em.persist(new ReservationEntity(null,"Ritz","DOUBLE",4,"2020-03-03",200));
         ReservationEntity entity=this.sut.findById(1L).get();
         assertThat(entity.getHotel()).isEqualTo("Ritz");

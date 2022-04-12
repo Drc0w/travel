@@ -29,7 +29,7 @@ public class ReservationFacadeTests {
     private ReservationRepository repository;
 
     @Test
-    public void whenListReservation_thenReturnNonEmptyList(){
+    public void testListReservation_shouldReturnNonEmptyList(){
         when(this.repository.findAll()).thenReturn(new ArrayList<>());
         assertThat(this.sut.findAll()).isNotNull();
     }
