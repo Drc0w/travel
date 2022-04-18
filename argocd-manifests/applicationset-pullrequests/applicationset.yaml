@@ -1,0 +1,43 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: travel-pr
+  namespace: argocd
+spec:
+  generators:
+    - matrix:
+        generators:
+          - git:
+              repoURL: https://gitlab.com/lopment/travel.git
+              revision: release/0.0.1
+              directories:
+                - path: charts/*
+          - pullRequest:
+              github:
+                # The GitHub organization or user.
+                owner: Drc0w
+                # The Github repository
+                repo: travel
+                # Reference to a Secret containing an access token. (optional)
+                tokenRef:
+                  secretName: github-token
+                  key: token
+  template:
+    metadata:
+      name: "travel-{{path.basename}}-pr{{number}}"
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/Drc0w/travel.git
+        targetRevision: '{{head_sha}}'
+        path: "{{path}}"
+        helm:
+          parameters:
+            - name: "image.tag"
+              value: "{{head_sha}}"
+      destination:
+        namespace: "argocd-test-pr{{ number }}"
+        server: https://kubernetes.default.svc
+      syncPolicy:
+        syncOptions:
+          - CreateNamespace=true

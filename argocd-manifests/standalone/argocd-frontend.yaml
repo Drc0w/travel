@@ -1,0 +1,17 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: travel-frontend
+spec:
+  # Target Kubernetes cluster server and namespace
+  destination:
+    namespace: travel
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    path: charts/frontend
+    repoURL: https://gitlab.com/lopment/travel.git
+    targetRevision: release/0.0.1
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true

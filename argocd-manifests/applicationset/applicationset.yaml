@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: travel
+  namespace: argocd
+spec:
+  generators:
+    - git:
+        repoURL: https://gitlab.com/lopment/travel.git
+        revision: release/0.0.1
+        directories:
+          - path: charts/*
+  template:
+    metadata:
+      name: 'travel-{{path.basename}}'
+    spec:
+      project: default
+      source:
+        repoURL: https://gitlab.com/lopment/argocd-test.git
+        targetRevision: HEAD
+        path: "{{path}}"
+      destination:
+        namespace: travel
+        server: https://kubernetes.default.svc
+      syncPolicy:
+        syncOptions:
+          - CreateNamespace=true
