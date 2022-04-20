@@ -116,7 +116,7 @@ spec:
       outputs:
         artifacts:
           - name: cov-art
-            path: /src
+            path: /src/backend/target/site/jacoco
 
     - name: report-tpl
       container:

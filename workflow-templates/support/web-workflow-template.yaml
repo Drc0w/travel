@@ -118,7 +118,7 @@ spec:
       outputs:
         artifacts:
           - name: cov-art
-            path: /src
+            path: /src/frontend/coverage
     - name: report-tpl
       container:
         image: alpine:3.14
