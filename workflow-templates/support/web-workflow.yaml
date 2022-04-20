@@ -83,7 +83,7 @@ spec:
     container:
       image: node:13.12.0-alpine 
       command: ["sh", "-c"]
-      args: [" ls /src &&  cd /src/frontend && npm install "]
+      args: [" ls /src &&  cd /src/frontend && npm install  "]
     inputs:
       artifacts:
       - name: src-art
@@ -101,7 +101,7 @@ spec:
     container:
       image:  node:13.12.0-alpine
       command: ["sh","-c"]
-      args: ["ls /src && cd /src/frontend  "]
+      args: ["ls /src && cd /src/frontend && CI=true npm test "]
     inputs:
       artifacts:
       - name: src-art
@@ -110,7 +110,7 @@ spec:
     container:
       image: node:13.12.0-alpine
       command: ["sh","-c"]
-      args: ["ls /src && cd /src/frontend  "]
+      args: ["ls /src && cd /src/frontend  && CI=true npm test -- --coverage"]
     inputs:
       artifacts:
       - name: src-art

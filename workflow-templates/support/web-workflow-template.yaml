@@ -1,137 +1,126 @@
 kind: WorkflowTemplate
 apiVersion: argoproj.io/v1alpha1
 metadata:
-  name: web-wf
+  name: web-workflow-template
 spec:
   entrypoint: main-tpl
   arguments:
     parameters:
-    - name: repo
-      value: https://gitlab.com/lopment/travel.git
-    - name: revision
-      value: release/0.0.1
+      - name: repo
+        value: https://gitlab.com/lopment/travel.git
+      - name: revision
+        value: release/0.0.1
+      - name: image_registry
+        value: registry.gitlab.com
+      - name: image
+        value: registry.gitlab.com/lopment/travel/frontend:0.0.1
+      - name: src_path
+        value: /src/frontend
   templates:
-  - name: main-tpl
-    dag:
-      tasks:
-      - name: call-checkout
-        template: checkout-tpl
-      - name: call-build
-        template: build-tpl
-        depends: "call-checkout.Succeeded"
-        arguments:
-          artifacts:
-          - name: src-art
-            from: "{{tasks.call-checkout.outputs.artifacts.src-art}}" 
-      - name: call-unit-test
-        template: unit-test-tpl
-        arguments:
-          artifacts:
-          - name: src-art
-            from: "{{tasks.call-checkout.outputs.artifacts.src-art}}"
-        depends: "call-build.Succeeded"
-      - name: call-cov-test
-        template: cov-test-tpl
-        depends: "call-build.Succeeded"
-        arguments:
-          artifacts:
-          - name: src-art
-            from: "{{tasks.call-checkout.outputs.artifacts.src-art}}"
-      - name: call-publish
-        template: publish-tpl
-        depends: "(call-unit-test.Succeeded && call-cov-test.Succeeded)"
-        arguments:
-          artifacts:
-          - name: bin-art
-            from: "{{tasks.call-build.outputs.artifacts.bin-art}}"
-      - name: call-report
-        template: report-tpl
-        depends: "call-publish.Succeeded"
+    - name: main-tpl
+      dag:
+        tasks:
+          - name: call-checkout
+            template: checkout-tpl
+          - name: call-build
+            template: build-tpl
+            depends: "call-checkout.Succeeded"
+            arguments:
+              artifacts:
+                - name: src-art
+                  from: "{{tasks.call-checkout.outputs.artifacts.src-art}}"
+          - name: call-unit-test
+            template: unit-test-tpl
+            arguments:
+              artifacts:
+                - name: src-art
+                  from: "{{tasks.call-checkout.outputs.artifacts.src-art}}"
+            depends: "call-build.Succeeded"
+          - name: call-cov-test
+            template: cov-test-tpl
+            depends: "call-build.Succeeded"
+            arguments:
+              artifacts:
+                - name: src-art
+                  from: "{{tasks.call-checkout.outputs.artifacts.src-art}}"
+          - name: call-publish
+            templateRef:
+              name:  docker-workflow-template
+              template: publish-tpl
+            depends: "(call-unit-test.Succeeded && call-cov-test.Succeeded)"
+            arguments:
+              parameters:
+                - name: image
+                  value: "{{workflow.parameters.image}}"
+                - name: image_registry
+                  value: "{{workflow.parameters.image_registry}}"
+                - name: src_path
+                  value: "{{workflow.parameters.src_path}}"
+              artifacts:
+                - name: bin-art
+                  from: "{{tasks.call-build.outputs.artifacts.bin-art}}"
+          - name: call-report
+            template: report-tpl
+            depends: "call-publish.Succeeded"
 
-  - name: checkout-tpl
-    script:
-      image: alpine:3.14
-      command: ["sh","-c"]
-      args: ["ls /src "]
-    inputs:
-      artifacts:
-      - name: src-art
-        path: /src
-        git:
-          repo: "{{workflow.parameters.repo}}"
-          revision: "{{workflow.parameters.revision}}" 
-    outputs:
-      artifacts:
-      - name: src-art
-        path: /src
-  - name: build-tpl
-    container:
-      image: node:13.12.0-alpine 
-      command: ["sh", "-c"]
-      args: [" ls /src &&  cd /src/frontend  "]
-    inputs:
-      artifacts:
-      - name: src-art
-        path: /src
-    outputs:
-      artifacts:
-      - name: bin-art
-        path: /src
-  - name: unit-test-tpl
-    container:
-      image:  node:13.12.0-alpine
-      command: ["sh","-c"]
-      args: ["ls /src && cd /src/frontend  "]
-    inputs:
-      artifacts:
-      - name: src-art
-        path: /src
-  - name: cov-test-tpl
-    container:
-      image: node:13.12.0-alpine
-      command: ["sh","-c"]
-      args: ["ls /src && cd /src/frontend  "]
-    inputs:
-      artifacts:
-      - name: src-art
-        path: /src
-    outputs:
-      artifacts:
-      - name: cov-art
-        path: /src
-  - name: publish-tpl
-    script:
-      image: docker:19.03.13
-      command: [sh, -c]
-      args: ["until docker ps; do sleep 3; done; cd /src/frontend; docker build -t $REPO/frontend:0.0.1 .; docker login $REGISTRY -u tonidev85@gmail.com -p 1985nicolas5891; docker push $REPO/frontend:0.0.1"]
-      env:
-      - name: DOCKER_HOST               # the docker daemon can be access on the standard port on localhost
-        value: 127.0.0.1
-      - name:  REGISTRY
-        value: "registry.gitlab.com"
-      - name:  REPO
-        value: "registry.gitlab.com/lopment/travel"
-    sidecars:
-    - name: dind
-      image: docker:19.03.13-dind          # Docker already provides an image for running a Docker daemon
-      command: [dockerd-entrypoint.sh]
-      env:
-        - name: DOCKER_TLS_CERTDIR         # Docker TLS env config
-          value: ""
-      securityContext:
-        privileged: true                # the Docker daemon can only run in a privileged container
-      # mirrorVolumeMounts will mount the same volumes specified in the main container
-      # to the sidecar (including artifacts), at the same mountPaths. This enables
-      # dind daemon to (partially) see the same filesystem as the main container in
-      # order to use features such as docker volume binding.
-      mirrorVolumeMounts: true
-    inputs:
-      artifacts:
-      - name: bin-art
-        path: /src
-      
-  - name: report-tpl
-    container:
-      image: alpine:3.14
-      command: ["echo"]
-      args: ["reports status"]
+    - name: checkout-tpl
+      script:
+        image: alpine:3.14
+        command: ["sh","-c"]
+        args: ["ls /src "]
+      inputs:
+        artifacts:
+          - name: src-art
+            path: /src
+            git:
+              repo: "{{workflow.parameters.repo}}"
+              revision: "{{workflow.parameters.revision}}"
+      outputs:
+        artifacts:
+          - name: src-art
+            path: /src
+    - name: build-tpl
+      container:
+        image: node:13.12.0-alpine
+        command: ["sh", "-c"]
+        args: [" ls /src &&  cd /src/frontend && npm install  "]
+      inputs:
+        artifacts:
+          - name: src-art
+            path: /src
+      outputs:
+        artifacts:
+          - name: bin-art
+            path: /src
+      memoize:
+        key: modules
+        cache:
+          configMap:
+            name: npm-install-cache
+    - name: unit-test-tpl
+      container:
+        image:  node:13.12.0-alpine
+        command: ["sh","-c"]
+        args: ["ls /src && cd /src/frontend && CI=true npm test "]
+      inputs:
+        artifacts:
+          - name: src-art
+            path: /src
+    - name: cov-test-tpl
+      container:
+        image: node:13.12.0-alpine
+        command: ["sh","-c"]
+        args: ["ls /src && cd /src/frontend  && CI=true npm test -- --coverage"]
+      inputs:
+        artifacts:
+          - name: src-art
+            path: /src
+      outputs:
+        artifacts:
+          - name: cov-art
+            path: /src
+    - name: report-tpl
+      container:
+        image: alpine:3.14
+        command: ["echo"]
+        args: ["reports status"]

@@ -98,7 +98,7 @@ spec:
     container:
       image:  maven:3.3-jdk-8
       command: ["sh","-c"]
-      args: ["ls /src && cd /src/backend "]
+      args: ["ls /src && cd /src/backend && mvn test"]
     inputs:
       artifacts:
       - name: src-art
@@ -108,7 +108,7 @@ spec:
     container:
       image: maven:3.3-jdk-8
       command: ["sh","-c"]
-      args: ["ls /src && cd /src/backend "]
+      args: ["ls /src && cd /src/backend && mvn prepare-package "]
     inputs:
       artifacts:
       - name: src-art
