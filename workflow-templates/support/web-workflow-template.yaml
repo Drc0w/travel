@@ -33,16 +33,16 @@ spec:
             template: unit-test-tpl
             arguments:
               artifacts:
-                - name: src-art
-                  from: "{{tasks.call-checkout.outputs.artifacts.src-art}}"
+                - name: bin-art
+                  from: "{{tasks.call-build.outputs.artifacts.bin-art}}"
             depends: "call-build.Succeeded"
           - name: call-cov-test
             template: cov-test-tpl
             depends: "call-build.Succeeded"
             arguments:
               artifacts:
-                - name: src-art
-                  from: "{{tasks.call-checkout.outputs.artifacts.src-art}}"
+                - name: bin-art
+                  from: "{{tasks.call-build.outputs.artifacts.bin-art}}"
           - name: call-publish
             templateRef:
               name:  docker-workflow-template
@@ -104,7 +104,7 @@ spec:
         args: ["ls /src && cd /src/frontend && CI=true npm test "]
       inputs:
         artifacts:
-          - name: src-art
+          - name: bin-art
             path: /src
     - name: cov-test-tpl
       container:
@@ -113,7 +113,7 @@ spec:
         args: ["ls /src && cd /src/frontend  && CI=true npm test -- --coverage"]
       inputs:
         artifacts:
-          - name: src-art
+          - name: bin-art
             path: /src
       outputs:
         artifacts:

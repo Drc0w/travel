@@ -1,7 +1,7 @@
 kind: Workflow
 apiVersion: argoproj.io/v1alpha1
 metadata: 
-  generateName: demo-
+  generateName: travel--
 spec:
   entrypoint: main
   templates:
@@ -22,7 +22,7 @@ spec:
           generateName: web-wf-
         spec:
           workflowTemplateRef:
-            name: web-wf
+            name: web-workflow-template
       successCondition: status.phase == Succeeded
       failureCondition: status.phase in (Failed, Error)
   - name: app-tpl
@@ -35,7 +35,7 @@ spec:
           generateName: app-wf-
         spec:
           workflowTemplateRef:
-            name: app-wf
+            name: app-workflow-template
       successCondition: status.phase == Succeeded
       failureCondition: status.phase in (Failed, Error)
    

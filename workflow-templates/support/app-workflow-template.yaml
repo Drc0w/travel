@@ -1,4 +1,4 @@
-kind: Workflow
+kind: WorkflowTemplate
 apiVersion: argoproj.io/v1alpha1
 metadata:
   name: app-workflow-template
