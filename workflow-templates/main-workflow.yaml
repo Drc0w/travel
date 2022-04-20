@@ -1,0 +1,42 @@
+kind: Workflow
+apiVersion: argoproj.io/v1alpha1
+metadata: 
+  generateName: demo-
+spec:
+  entrypoint: main
+  templates:
+  - name: main
+    steps:
+    - - name: web-step
+        template: web-tpl
+      - name: app-step
+        template: app-tpl
+
+  - name: web-tpl
+    resource:
+      action: create
+      manifest: |
+        kind: Workflow
+        apiVersion: argoproj.io/v1alpha1
+        metadata:
+          generateName: web-wf-
+        spec:
+          workflowTemplateRef:
+            name: web-wf
+      successCondition: status.phase == Succeeded
+      failureCondition: status.phase in (Failed, Error)
+  - name: app-tpl
+    resource:
+      action: create
+      manifest: |
+        kind: Workflow
+        apiVersion: argoproj.io/v1alpha1
+        metadata:
+          generateName: app-wf-
+        spec:
+          workflowTemplateRef:
+            name: app-wf
+      successCondition: status.phase == Succeeded
+      failureCondition: status.phase in (Failed, Error)
+   
+       
