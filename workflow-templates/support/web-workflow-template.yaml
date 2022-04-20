@@ -83,7 +83,7 @@ spec:
       container:
         image: node:13.12.0-alpine
         command: ["sh", "-c"]
-        args: [" ls /src &&  cd /src/frontend && npm install  "]
+        args: [" ls /src &&  cd /src/frontend && PATH=./node_modules/.bin:$PATH && npm ci --silent &&  npm install react-scripts@3.4.1 -g --silent "]
       inputs:
         artifacts:
           - name: src-art
@@ -101,7 +101,7 @@ spec:
       container:
         image:  node:13.12.0-alpine
         command: ["sh","-c"]
-        args: ["ls /src && cd /src/frontend && CI=true npm test "]
+        args: ["ls /src && cd /src/frontend &&  npm install react-scripts@3.4.1 -g --silent && PATH=./node_modules/.bin:$PATH && CI=true npm test "]
       inputs:
         artifacts:
           - name: bin-art
@@ -110,7 +110,7 @@ spec:
       container:
         image: node:13.12.0-alpine
         command: ["sh","-c"]
-        args: ["ls /src && cd /src/frontend  && CI=true npm test -- --coverage"]
+          args: ["ls /src && cd /src/frontend && npm install react-scripts@3.4.1 -g --silent && PATH=./node_modules/.bin:$PATH  && CI=true npm test -- --coverage"]
       inputs:
         artifacts:
           - name: bin-art
