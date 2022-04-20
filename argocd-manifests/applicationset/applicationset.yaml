@@ -16,8 +16,8 @@ spec:
     spec:
       project: default
       source:
-        repoURL: https://gitlab.com/lopment/argocd-test.git
-        targetRevision: HEAD
+        repoURL: https://gitlab.com/lopment/travel.git
+        targetRevision: release/0.0.1
         path: "{{path}}"
       destination:
         namespace: travel

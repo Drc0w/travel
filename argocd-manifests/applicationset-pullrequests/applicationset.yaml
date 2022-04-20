@@ -31,13 +31,10 @@ spec:
         repoURL: https://github.com/Drc0w/travel.git
         targetRevision: '{{head_sha}}'
         path: "{{path}}"
-        helm:
-          parameters:
-            - name: "image.tag"
-              value: "{{head_sha}}"
       destination:
-        namespace: "argocd-test-pr{{ number }}"
+        namespace: "travel-pr{{ number }}"
         server: https://kubernetes.default.svc
       syncPolicy:
+        automated: {}
         syncOptions:
           - CreateNamespace=true
