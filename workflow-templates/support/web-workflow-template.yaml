@@ -92,16 +92,16 @@ spec:
         artifacts:
           - name: bin-art
             path: /src
-      memoize:
-        key: modules
-        cache:
-          configMap:
-            name: npm-install-cache
+#      memoize:
+#        key: modules
+#        cache:
+#          configMap:
+#            name: npm-install-cache
     - name: unit-test-tpl
       container:
         image:  node:13.12.0-alpine
         command: ["sh","-c"]
-        args: ["ls /src && cd /src/frontend &&  npm install react-scripts@3.4.1 -g --silent && PATH=./node_modules/.bin:$PATH && CI=true npm test "]
+        args: ["ls /src && cd /src/frontend "]
       inputs:
         artifacts:
           - name: bin-art
@@ -110,7 +110,7 @@ spec:
       container:
         image: node:13.12.0-alpine
         command: ["sh","-c"]
-        args: ["ls /src && cd /src/frontend && npm install react-scripts@3.4.1 -g --silent && PATH=./node_modules/.bin:$PATH  && CI=true npm test -- --coverage"]
+        args: ["ls /src"]
       inputs:
         artifacts:
           - name: bin-art
@@ -118,7 +118,7 @@ spec:
       outputs:
         artifacts:
           - name: cov-art
-            path: /src/frontend/coverage
+            path: /src
     - name: report-tpl
       container:
         image: alpine:3.14
